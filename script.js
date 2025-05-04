@@ -257,61 +257,68 @@ function saveFavorites() {
 
 function showFavorites() { }
 
-function updateFavouritesURL(uri, isNowFvourites) {
-    if (currentRecipesDetails && currentRecipesDetails.uri === uri) {
-        saveRecipeBtn.innerHTML = isNowFvourites ?
-           ` <i class="bi bi-heart-fill"></i> Remove from favourite:
-        <i class="bi bi-heart"></i> save to Favourite`;
+function updateFavoritesUI(uri, isNowFavorites){
+    //update model button
+    if(currentRecipeDetails && currentRecipeDetails.uri === uri){
+        saveRecipeBtn.innerHTML = isNowFavorites ?
+        `<i class="bi bi-heart-fill"></i> Remove from Favorites`:
+        `<i class="bi bi-heart"></i> Save to Favorites`;
     }
-    const favoriteBtn = document.querySelector(.favorites - btn[data - uri= "${uri}"]);
-    if (favoriteBtn) {
-        favoriteBtn.innerHTML = isNowFvourites ?
-        `<i class="bi bi-heart-fill"></i> saved:
-        <i class="bi bi-heart"></i> save`;
-        favoriteBtn.classList.toggle('btn-outline-secondary', !isNowFvourites);
-        favoriteBtn.classList.toggle('btn-success', isNowFvourites);
 
+    const favoriteBtn = document.querySelector(`.favorite-btn[data-uri="${uri}"]`);
+    if(favoriteBtn){
+        favoriteBtn.innerHTML = isNowFavorites ?
+        `<i class="bi bi-heart-fill"></i> Saved`:
+        `<i class="bi bi-heart"></i> Save`;
+        favoriteBtn.classList.toggle('btn-outline-secondary', !isNowFavorites);
+        favoriteBtn.classList.toggle('btn-success', isNowFavorites);
     }
 }
 
-function renderFavourites() {
-    if (favourites.length === 0) {
+
+function renderFavorites(){
+    if(favorites.length === 0){
         noFavoritesMessage.style.display = 'block';
         favoritesModalBody.innerHTML = '';
         favoritesModalBody.appendChild(noFavoritesMessage);
         return;
     }
+
     noFavoritesMessage.style.display = 'none';
-    const favoriteList = document.createElement('div');
-    favoriteList.className = 'list-group';
 
-    favourites.forEach(fav => {
+    const favoritesList = document.createElement('div');
+    favoritesList.className = 'list-group';
+
+    favorites.forEach(fav => {
         const favoriteItem = document.createElement('div');
-        favoriteItem.className = 'list-group-item favorite-card';
-        favoriteItem.innerHTML = `<div class="d-flex align-item-center">
-        <img src="${fav.image}" class="favorite-image me-3" alt="${fav.label}">
-        <div class="flex-group-1">
-        <h5>${fav.label}</h5>
-        <p class="mb-1 text-muted">${fav.source}</p>
-        <div class="d-flex">
-        <a href="${fav.url}" target="_blank" class="btn btn-sm btn-outline-success me-2">
-        <i class="bi bi-link"></i></a>
-        <button class="btn btn-sm btn-outline-danger remove-favorite"
-         data-uri="${fav.uri}"><i class="bi bi-trash"></i></button>
-        </div>
-        </div>
-        </div>`;
-
-        favoriteList.appendChild(favoriteItem);
+        favoriteItem.className = 'list-group-item favotite-card';
+        favoriteItem.innerHTML = `
+            <div class="d-flex align-items-center">
+                <img src="${fav.image}" class="favorite-image me-3" alt="${fav.label}">
+                <div class="flex-grow-1">
+                    <h5>${fav.label}</h5>
+                    <p class="mb-1 text-muted">${fav.source}</p>
+                    <div class="d-flex">
+                        <a href="${fav.url}" target="_blank" 
+                        class="btn btn-sm btn-outline-success me-2">
+                        <i class="bi bi-link"></i>
+                        </a>
+                        <button class="btn btn-sm btn-outline-danger remove-favorite" 
+                        data-uri="${fav.uri}"><i class="bi bi-trash"></i>Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        favoritesList.appendChild(favoriteItem);
     });
 
     favoritesModalBody.innerHTML = '';
-    favoritesModalBody.appendChild(favoriteList);
+    favoritesModalBody.appendChild(favoritesList);
 
     document.querySelectorAll('.remove-favorite').forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function(){
             const uri = this.dataset.uri;
-
+            toggleFavorite(uri);
         })
     })
 }
