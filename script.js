@@ -232,10 +232,10 @@ function toggleFavourite(uri) {
     const recipe = currentRecipes.find(r => r.uri === uri) || currentRecipesDetails;
     if (!recipe) return;
 
-    const favoriteIndex = favourites.findIndex(fav => fav.uri === uri);
+    const favoriteIndex = favorites.findIndex(fav => fav.uri === uri);
 
     if (favoriteIndex === -1) {
-        favourites.unshift({
+        favorites.unshift({
             uri: recipe.uri,
             label: recipe.label,
             image: recipe.image,
@@ -243,7 +243,7 @@ function toggleFavourite(uri) {
             url: recipe.url
         });
     } else {
-        favourites.splice(favoriteIndex, 1);
+        favorites.splice(favoriteIndex, 1);
     }
     saveFavorites();
     updateFavoritesUI(uri,favoriteIndex === -1);
@@ -318,7 +318,7 @@ function renderFavorites(){
     document.querySelectorAll('.remove-favorite').forEach(btn => {
         btn.addEventListener('click', function(){
             const uri = this.dataset.uri;
-            toggleFavorite(uri);
+            toggleFavourite(uri);
         })
     })
 }
